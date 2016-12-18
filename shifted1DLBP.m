@@ -1,4 +1,4 @@
-function newSignal=shifted1DLBP(signal,PL)
+function lbphist=shifted1DLBP(signal,PL)
     sz=size(signal,2);
     PR=8-PL;
     PC=PL+1;
@@ -12,4 +12,5 @@ function newSignal=shifted1DLBP(signal,PL)
         newData=[conv(1:PL) conv(PC+1:PC+PR)];
         newSignal(i-PL)=bi2de(newData,'left-msb');
     end
+    lbphist = imhist(newSignal);
 end
