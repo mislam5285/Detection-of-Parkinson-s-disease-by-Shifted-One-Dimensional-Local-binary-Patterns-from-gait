@@ -5,42 +5,30 @@ szTest=7;
 for folderNameId=1:size(folderName,2) 
     listData=dir(folderName{folderNameId});
     listDataName={listData.name};
-    for dataIdx=1:szTrain
-        dataIdxStr=num2str(dataIdx);
-        filenameI=strcat(folderName{folderNameId},'\',listDataName{dataIdx+2});
-        signal=load(filenameI);
-        sinyal=signal.data';
-        LBPSignal=zeros(9,12121);
-        LBPHist=zeros(9,256);
-        for PL=0:8
+    sizeData=size(listDataName,2)-2;
+    for PL=0:8
+        %training phase
+        LBPSignal=zeros(sizeData,12120);
+        LBPHist=zeros(sizeData,257);
+        for dataIdx=1:sizeData
+            dataIdxStr=num2str(dataIdx);
+            dataName=listDataName{dataIdx+2};
+            filenameI=strcat(folderName{folderNameId},'\',dataName);
+            signal=load(filenameI);
+            sinyal=signal.data';
+            kodeSinyal=dataName(5:6);
+            kodeSinyal=str2double(kodeSinyal);
+            kodeLabel=dataName(3:4);
             [lbpHist,lbpSignal]=shifted1DLBP(sinyal,PL);
-            LBPSignal(PL+1,1:12121)=[PL 8-PL lbpSignal];
-            LBPHist(PL+1,1:256)=lbpHist;
+            LBPSignal(dataIdx,1:12120)=[kodeSinyal lbpSignal];
+            LBPHist(PL+1,1:257)=[kodeSinyal lbpHist];
             %ekstraksiFitur %input ekstraksi fitur here%
         end
-        fileNameLBPSignal=strcat('LBPSignal\dataTrain',listDataName{dataIdx+2});
+        fileNameLBPSignal=strcat('LBPSignal\',kodeLabel,'_PL',num2str(PL),'_PR',num2str(8-PL));
         save(fileNameLBPSignal,'LBPSignal');
-        fileNameLBPHist=strcat('LBPHist\dataTrain',listDataName{dataIdx+2});
+        fileNameLBPHist=strcat('LBPHist\',kodeLabel,'_PL',num2str(PL),'_PR',num2str(8-PL));
         save(fileNameLBPHist,'LBPHist');
     end
-    
-    for dataIdx=szTrain+1:szTrain+szTest
-        dataIdxStr=num2str(dataIdx);
-        filenameI=strcat(folderName{folderNameId},'\',listDataName{dataIdx+2});
-        signal=load(filenameI);
-        sinyal=signal.data';
-        LBPSignal=zeros(9,12121);
-        LBPHist=zeros(9,256);
-        for PL=0:8
-            [lbpHist,lbpSignal]=shifted1DLBP(sinyal,PL);
-            LBPSignal(PL+1,1:12121)=[PL 8-PL lbpSignal];
-            LBPHist(PL+1,1:256)=lbpHist;
-            %ekstraksiFitur %input ekstraksi fitur here%
-        end
-        fileNameLBPSignal=strcat('LBPSignal\dataTest',listDataName{dataIdx+2});
-        save(fileNameLBPSignal,'LBPSignal');
-        fileNameLBPHist=strcat('LBPHist\dataTest',listDataName{dataIdx+2});
-        save(fileNameLBPHist,'LBPHist');
-    end
-    
+        
 end
+ 
