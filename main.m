@@ -27,7 +27,7 @@ for folderNameId=1:size(folderName,2)
             LBPFeature(dataIdx,1:8)=[kodeSinyal lbpFeature folderNameId];%ekstraksiFitur %input ekstraksi fitur here%
         end
         fileNameLBPSignal=strcat('LBPSignal\',kodeLabel,'_PL',num2str(PL),'_PR',num2str(8-PL));
-        %save(fileNameLBPSignal,'LBPSignal');
+        save(fileNameLBPSignal,'LBPSignal');
         fileNameLBPHist=strcat('LBPHist\',kodeLabel,'_PL',num2str(PL),'_PR',num2str(8-PL));
         save(fileNameLBPHist,'LBPHist');
         fileNameLBPFeature=strcat('LBPFeature\',kodeLabel,'_PL',num2str(PL),'_PR',num2str(8-PL));
